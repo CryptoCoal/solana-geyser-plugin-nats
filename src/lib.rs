@@ -91,5 +91,7 @@ pub extern "C" fn _create_plugin() -> *mut dyn GeyserPlugin {
         cluster: "solana-sniper".to_string(),
         flush_interval_ms: 50,
     };
-    Box::into_raw(Box::new(plugin))
+
+    let boxed: Box<dyn GeyserPlugin> = Box::new(plugin);
+    Box::into_raw(boxed)
 }
