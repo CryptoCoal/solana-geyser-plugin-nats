@@ -6,4 +6,4 @@ edition = "2021"
 [dependencies]
 log = "0.4"
 env_logger = "0.9"
-solana-geyser-plugin-manager = { path = "../../solana/geyser-plugin-manager" }log = "0.4"
+solana-geyser-plugin-manager = { path = "../../solana/geyser-plugin-manager" }
