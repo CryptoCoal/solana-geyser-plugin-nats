@@ -1,0 +1,29 @@
+# Ignore environment secrets
+.env
+
+# Docker-specific
+docker/clickhouse/users.xml
+
+# Logs
+logs/
+*.log
+
+# Build artifacts
+target/
+Cargo.lock
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.swp
+*.bak
+*.tmp
+
+# VSCode or JetBrains IDE settings
+.vscode/
+.idea/
+
+# Test results or coverage (if applicable)
+coverage/
