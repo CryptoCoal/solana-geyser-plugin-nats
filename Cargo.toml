@@ -1,3 +1,13 @@
+[package]
+name = "solana-geyser-plugin-nats"
+version = "0.1.0"
+edition = "2021"
+crate-type = ["cdylib"]
+
+[lib]
+name = "geyser_nats"
+crate-type = ["cdylib"]
+
 [dependencies]
 log = "0.4"
 serde = { version = "1.0", features = ["derive"] }
