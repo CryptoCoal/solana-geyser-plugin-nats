@@ -4,10 +4,11 @@ use {
     serde::Serialize,
     serde_json::json,
     solana_geyser_plugin_interface::{
-        geyser_plugin_interface::{GeyserPlugin, GeyserPluginSlotInfo, GeyserPluginResult, ReplicaAccountInfoVersions, SlotStatus},
-        GeyserPluginManager,
+        geyser_plugin_interface::{
+            GeyserPlugin, GeyserPluginResult, ReplicaAccountInfoVersions, SlotStatus,
+        },
     },
-    std::{collections::HashMap, ffi::CStr, fs, path::Path, sync::Mutex},
+    std::fs,
 };
 
 #[derive(Serialize)]
@@ -17,6 +18,7 @@ struct SlotPayload {
     status: String,
 }
 
+#[derive(Debug)]
 struct GeyserNatsPlugin {
     nats_conn: Option<Connection>,
     subject: String,
@@ -54,11 +56,16 @@ impl GeyserPlugin for GeyserNatsPlugin {
         Ok(())
     }
 
-    fn update_slot_status(&self, slot_info: &GeyserPluginSlotInfo) -> GeyserPluginResult<()> {
+    fn update_slot_status(
+        &self,
+        slot: u64,
+        parent: Option<u64>,
+        status: SlotStatus,
+    ) -> GeyserPluginResult<()> {
         let payload = SlotPayload {
-            slot: slot_info.slot,
-            parent: slot_info.parent,
-            status: format!("{:?}", slot_info.status),
+            slot,
+            parent,
+            status: format!("{:?}", status),
         };
         self.publish(&payload);
         Ok(())
