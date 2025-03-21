@@ -2,14 +2,14 @@ use {
     log::*,
     nats::{Connection, Options},
     serde::Serialize,
-    serde_json::json,
     solana_geyser_plugin_interface::{
         geyser_plugin_interface::{
-            GeyserPlugin, GeyserPluginResult, ReplicaAccountInfoVersions, SlotStatus,
+            GeyserPlugin, ReplicaAccountInfoVersions, SlotStatus
         },
     },
     std::fs,
 };
+use solana_geyser_plugin_interface::geyser_plugin_interface::GeyserPluginError;
 
 #[derive(Serialize)]
 struct SlotPayload {
@@ -41,9 +41,10 @@ impl GeyserPlugin for GeyserNatsPlugin {
         "GeyserNatsPlugin"
     }
 
-    fn on_load(&mut self, config_file: &str) -> GeyserPluginResult<()> {
+    fn on_load(&mut self, config_file: &str) -> Result<(), GeyserPluginError> {
         let config_str = fs::read_to_string(config_file)?;
-        let config: serde_json::Value = serde_json::from_str(&config_str)?;
+        let config: serde_json::Value = serde_json::from_str(&config_str)
+             .map_err(|e| GeyserPluginError::Custom(Box::new(e)))?;
 
         let nats_url = config["nats_url"].as_str().unwrap_or("127.0.0.1");
         self.subject = config["nats_subject"].as_str().unwrap_or("sniper.blocks").to_string();
@@ -61,7 +62,7 @@ impl GeyserPlugin for GeyserNatsPlugin {
         slot: u64,
         parent: Option<u64>,
         status: SlotStatus,
-    ) -> GeyserPluginResult<()> {
+    ) -> Result<(), GeyserPluginError> {
         let payload = SlotPayload {
             slot,
             parent,
@@ -71,12 +72,12 @@ impl GeyserPlugin for GeyserNatsPlugin {
         Ok(())
     }
 
-    fn update_account(&self, _account: ReplicaAccountInfoVersions, _slot: u64, _is_startup: bool) -> GeyserPluginResult<()> {
+    fn update_account(&self, _account: ReplicaAccountInfoVersions, _slot: u64, _is_startup: bool) -> Result<(), GeyserPluginError> {
         // (Optional: You can implement account streaming here)
         Ok(())
     }
 
-    fn notify_end_of_startup(&self) -> GeyserPluginResult<()> {
+    fn notify_end_of_startup(&self) -> Result<(), GeyserPluginError> {
         info!("Geyser NATS plugin finished startup");
         Ok(())
     }
