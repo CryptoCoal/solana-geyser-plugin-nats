@@ -42,6 +42,9 @@ impl GeyserPlugin for GeyserNatsPlugin {
     }
 
     fn on_load(&mut self, config_file: &str) -> Result<(), GeyserPluginError> {
+
+        println!("[PLUGIN] on_load called — attempting to connect to NATS");
+
         let config_str = fs::read_to_string(config_file)?;
         let config: serde_json::Value = serde_json::from_str(&config_str)
              .map_err(|e| GeyserPluginError::Custom(Box::new(e)))?;
@@ -85,6 +88,9 @@ impl GeyserPlugin for GeyserNatsPlugin {
 
 #[no_mangle]
 pub extern "C" fn _create_plugin() -> *mut dyn GeyserPlugin {
+
+    println!("[PLUGIN] _create_plugin() loaded from .so ✅");
+
     let plugin = GeyserNatsPlugin {
         nats_conn: None,
         subject: "sniper.blocks".to_string(),
