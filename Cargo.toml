@@ -2,7 +2,6 @@
 name = "solana-geyser-plugin-nats"
 version = "0.1.0"
 edition = "2021"
-crate-type = ["cdylib"]
 
 [lib]
 name = "geyser_nats"
