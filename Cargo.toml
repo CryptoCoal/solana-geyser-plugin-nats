@@ -21,6 +21,3 @@ solana-sdk = "=1.16.25"
 
 # Pin zeroize to an older version that satisfies both
 zeroize = "=1.3.0"
-
-[patch.crates-io]
-zeroize = "=1.3.0"
