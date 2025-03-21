@@ -88,15 +88,5 @@ impl GeyserPlugin for GeyserNatsPlugin {
 
 #[no_mangle]
 pub extern "C" fn _create_plugin() -> *mut dyn GeyserPlugin {
-    println!("[PLUGIN] _create_plugin() loaded from .so ✅");
-
-    let plugin = GeyserNatsPlugin {
-        nats_conn: None,
-        subject: "sniper.blocks".to_string(),
-        cluster: "solana-sniper".to_string(),
-        flush_interval_ms: 50,
-    };
-
-    let boxed: Box<dyn GeyserPlugin> = Box::new(plugin);
-    Box::into_raw(boxed)
+    panic!("PLUGIN TRIGGERED: _create_plugin() was called");
 }
